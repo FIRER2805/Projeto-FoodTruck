@@ -3,6 +3,7 @@ package view;
 import java.util.Scanner;
 
 import controller.UsuarioController;
+import model.vo.TipoUsuarioVO;
 import model.vo.UsuarioVo;
 
 public class Login {
@@ -26,13 +27,15 @@ public class Login {
 					{
 						System.out.println("\nUsuário Logado: " + usuarioVO.getLogin());
 						System.out.println("\nPerfil: " + usuarioVO.getTipoUsuario());
+						Menu menu = new Menu();
+						menu.apresentarMenu(usuarioVO);
 					}
 					
 					break;
 				}
 				case OPCAO_MENU_CRIAR_CONTA:
 				{
-					System.out.println("Criando conta");
+					this.cadastrarNovoUsuario();
 					break;
 				}
 				default:
@@ -80,5 +83,13 @@ public class Login {
 		System.out.print("\nDigite uma opção: ");
 		Scanner teclado = new Scanner(System.in);
 		return Integer.parseInt(teclado .nextLine());
+	}
+	
+	private void cadastrarNovoUsuario() {
+		UsuarioVo usuarioVo = new UsuarioVo();
+		usuarioVo.setTipoUsuario(TipoUsuarioVO.CLIENTE);
+		
+		MenuUsuario menuUsuario = new MenuUsuario();
+		menuUsuario.cadastrarNovoUsuario(usuarioVo);
 	}
 }

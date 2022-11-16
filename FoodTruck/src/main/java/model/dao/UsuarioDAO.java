@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 import model.vo.TipoUsuarioVO;
 import model.vo.UsuarioVo;
@@ -56,5 +57,20 @@ public class UsuarioDAO {
 			Banco.closeConnection(conn);
 		}
 		return usuarioVo;
+	}
+
+	public ArrayList<TipoUsuarioVO> consultarTipoUsuarioDAO() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public boolean verificarExistenciaRegistroPorCpfDao(UsuarioVo usuarioVo) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public UsuarioVo cadastrarUsuarioDAo(UsuarioVo usuarioVo) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
