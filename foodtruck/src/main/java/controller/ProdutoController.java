@@ -14,15 +14,26 @@ public class ProdutoController {
 		produtoBO.cadastrarProdutoBO(produto);
 	}
 	
-	public static ArrayList<ProdutoVO> consultarTodosUsuarios()
+	public static ArrayList<ProdutoVO> consultarTodosProdutos()
 	{
 		ProdutoBO produtoBO = new ProdutoBO();
 		return produtoBO.consultarTodosProdutosBO();
 	}
 	
-	public static ProdutoVO consultarUmUsuario(int id)
+	public static ProdutoVO consultarUmProduto(int id)
 	{
 		ProdutoBO produtoBO = new ProdutoBO();
 		return produtoBO.consultarUmProduto(id);
+	}
+
+	public static void atualizarProduto(ProdutoVO produto) {
+		ProdutoBO produtoBO = new ProdutoBO();
+		produtoBO.atualizarProduto(produto);
+	}
+
+	public static void excluirProduto(int idProduto) {
+		ProdutoBO produtoBO = new ProdutoBO();
+		produtoBO.excluirProduto(idProduto);
+		
 	}
 }

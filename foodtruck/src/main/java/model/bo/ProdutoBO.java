@@ -22,5 +22,16 @@ public class ProdutoBO {
 		ProdutoDAO produtoDAO = new ProdutoDAO();
 		return produtoDAO.consultaUmProduto(id);
 	}
+
+	public void atualizarProduto(ProdutoVO produto) {
+		ProdutoDAO produtoDAO = new ProdutoDAO();
+		produtoDAO.atualizarProduto(produto);
+	}
+
+	public void excluirProduto(int idProduto) {
+		ProdutoDAO produtoDAO = new ProdutoDAO();
+		produtoDAO.excluirProduto(idProduto);
+		
+	}
 	
 }

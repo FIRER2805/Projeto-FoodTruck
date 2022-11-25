@@ -104,4 +104,45 @@ public class ProdutoDAO {
 		return produto;
 	}
 
+	public void atualizarProduto(ProdutoVO produto) {
+		String query = "UPDATE produto SET idtipoproduto = ?, nome = ?, preco = ?, "
+				+ "datacadastro = ?, dataexclusao = ? WHERE idproduto = ? ;";
+		Connection conn = Banco.getConnection();
+		PreparedStatement prstmt = Banco.getPreparedStatement(conn, query);
+		try 
+		{
+			prstmt.setInt(1, produto.getTipoProduto().getValor());
+			prstmt.setString(2, produto.getNome());
+			prstmt.setDouble(3, produto.getPreco());
+			prstmt.setString(4, produto.getDataCadastro().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+			prstmt.setString(5, produto.getDataExclusao().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+			prstmt.setInt(6, produto.getIdProduto());
+			prstmt.executeUpdate();
+			System.out.println("O produto foi atualizado com sucesso!");
+		}
+		catch(SQLException erro)
+		{
+			System.out.println("Erro no metodo atualizarProduto da classe ProdutoDAO");
+			System.out.println(erro.getMessage());
+		}
+	}
+
+	public void excluirProduto(int idProduto) {
+		String query = "delete from produto where idproduto = ?";
+		Connection conn = Banco.getConnection();
+		PreparedStatement prstmt = Banco.getPreparedStatement(conn, query);
+		try 
+		{
+			prstmt.setInt(1, idProduto);
+			prstmt.executeUpdate();
+			System.out.println("Produto excluido com sucesso!");
+		}
+		catch(SQLException erro)
+		{
+			System.out.println("Erro no metodo ExcluirProduto da classe ProdutoDAO");
+			System.out.println(erro.getMessage());
+		}
+		
+	}
+
 }

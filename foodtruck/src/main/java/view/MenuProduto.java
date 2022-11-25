@@ -1,5 +1,7 @@
 package view;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -21,8 +23,6 @@ public class MenuProduto {
 	private final int CONSULTAR_TODOS_USUARIOS = 2;
 	private final int SUBMENU_VOLTAR = 9;
 
-	// opcao escolhida pelo usuario
-
 	// apresenta o menu
 	public void apresentarMenuProduto() {
 		int opcao = 0;
@@ -36,16 +36,42 @@ public class MenuProduto {
 				this.subMenuConsultarProdutos();
 				break;
 			case ATUALIZAR_PRODUTO:
-				System.out.println("atualizando produto...");
+				this.AtualizarProduto();
 				break;
 			case EXCLUIR_PRODUTO:
-				System.out.println("excluindo produto...");
+				this.excluir_produto();
 				break;
 			default:
 				System.out.println("opção invalida!");
 				break;
 			}
 		}
+	}
+
+	private void excluir_produto() {
+		ProdutoController.excluirProduto(this.idProduto());
+	}
+
+	private void AtualizarProduto() {
+		ProdutoController.atualizarProduto(this.produtoAtualizado());
+	}
+
+	// retorna as informações que devem ser atualizadas no produto
+	private ProdutoVO produtoAtualizado() {
+		Scanner scan = new Scanner(System.in);
+		ProdutoVO produtoVO = new ProdutoVO();
+		produtoVO.setIdProduto(this.idProduto());
+		System.out.println("Informe o tipo do produto:");
+		produtoVO.setTipoProduto(this.mostraTiposProduto());
+		System.out.println("Informe o nome do produto:");
+		produtoVO.setNome(scan.nextLine());
+		System.out.println("Informe o preço do produto:");
+		produtoVO.setPreco(Double.parseDouble(scan.nextLine()));
+		System.out.println("Informe a data de cadastro no formato 'yyyy-MM-dd HH:mm:ss':");
+		produtoVO.setDataCadastro(LocalDateTime.parse(scan.nextLine(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+		System.out.println("Informe a data de exclusão no formato 'yyyy-MM-dd HH:mm:ss':");
+		produtoVO.setDataExclusao(LocalDateTime.parse(scan.nextLine(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+		return produtoVO;
 	}
 
 	public int menuEscolhido() {
@@ -103,10 +129,10 @@ public class MenuProduto {
 			switch(opcao)
 			{
 			case CONSULTAR_UM_USUARIO:
-				this.apresentarUmUsuario(idUsuario());
+				this.apresentarUmProduto(idProduto());
 				break;
 			case CONSULTAR_TODOS_USUARIOS:
-				this.apresentarTodosUsuarios();
+				this.apresentarTodosProdutos();
 				break;
 				default:
 					System.out.println("opcão invalida");
@@ -115,18 +141,19 @@ public class MenuProduto {
 		}
 	}
 	
-	private void apresentarUmUsuario(int id) {
-		System.out.println(ProdutoController.consultarUmUsuario(id));
+	private void apresentarUmProduto(int id) {
+		System.out.println(ProdutoController.consultarUmProduto(id));
 	}
 
-	private int idUsuario() {
+	// retorna um menu para escolher o id do produto
+	private int idProduto() {
 		Scanner scan = new Scanner(System.in);
 		System.out.println("Digite o id do produto: ");
 		return Integer.parseInt(scan.nextLine());
 	}
 
-	private void apresentarTodosUsuarios() {
-		ArrayList<ProdutoVO> produtos = ProdutoController.consultarTodosUsuarios();
+	private void apresentarTodosProdutos() {
+		ArrayList<ProdutoVO> produtos = ProdutoController.consultarTodosProdutos();
 		for(int i = 0; i < produtos.size(); i++)
 		{
 			System.out.println(produtos.get(i));
@@ -142,7 +169,4 @@ public class MenuProduto {
 		System.out.println("digite uma opção: ");
 		return Integer.parseInt(scan.nextLine());
 	}
-	
-	
-
 }
