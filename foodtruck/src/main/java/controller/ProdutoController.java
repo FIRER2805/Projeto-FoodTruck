@@ -19,4 +19,10 @@ public class ProdutoController {
 		ProdutoBO produtoBO = new ProdutoBO();
 		return produtoBO.consultarTodosProdutosBO();
 	}
+	
+	public static ProdutoVO consultarUmUsuario(int id)
+	{
+		ProdutoBO produtoBO = new ProdutoBO();
+		return produtoBO.consultarUmProduto(id);
+	}
 }

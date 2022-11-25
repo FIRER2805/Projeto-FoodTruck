@@ -103,7 +103,7 @@ public class MenuProduto {
 			switch(opcao)
 			{
 			case CONSULTAR_UM_USUARIO:
-				System.out.println("consultando um usuario");
+				this.apresentarUmUsuario(idUsuario());
 				break;
 			case CONSULTAR_TODOS_USUARIOS:
 				this.apresentarTodosUsuarios();
@@ -115,6 +115,16 @@ public class MenuProduto {
 		}
 	}
 	
+	private void apresentarUmUsuario(int id) {
+		System.out.println(ProdutoController.consultarUmUsuario(id));
+	}
+
+	private int idUsuario() {
+		Scanner scan = new Scanner(System.in);
+		System.out.println("Digite o id do produto: ");
+		return Integer.parseInt(scan.nextLine());
+	}
+
 	private void apresentarTodosUsuarios() {
 		ArrayList<ProdutoVO> produtos = ProdutoController.consultarTodosUsuarios();
 		for(int i = 0; i < produtos.size(); i++)

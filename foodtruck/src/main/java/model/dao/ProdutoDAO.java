@@ -44,7 +44,7 @@ public class ProdutoDAO {
 	}
 
 	public ArrayList<ProdutoVO> ConsultarTodosProdutosDAO() {
-		String query = "select * from produto";
+		String query = "select * from produto;";
 		Connection conn = Banco.getConnection();
 		Statement stmt = Banco.getStatement(conn);
 		ArrayList<ProdutoVO> produtos = new ArrayList<ProdutoVO>();
@@ -73,6 +73,35 @@ public class ProdutoDAO {
 			produtos = null;
 		}
 		return produtos;
+	}
+	public ProdutoVO consultaUmProduto(int id)
+	{
+		String query = "select * from produto where idproduto = ?;";
+		Connection conn = Banco.getConnection();
+		PreparedStatement prstmt = Banco.getPreparedStatement(conn, query);
+		ResultSet resultado = null;
+		ProdutoVO produto = new ProdutoVO();
+		try 
+		{
+			prstmt.setInt(1, id);
+			resultado = prstmt.executeQuery();
+			resultado.next();
+			produto.setIdProduto(resultado.getInt(1));
+			TipoProdutoVO tipoProduto = TipoProdutoVO.getTipoProdutoVOPorValor(resultado.getInt(2));
+			produto.setTipoProduto(tipoProduto);
+			produto.setNome(resultado.getString(3));
+			produto.setPreco(resultado.getDouble(4));
+			produto.setDataCadastro(LocalDateTime.parse(resultado.getString(5),DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+			if(resultado.getString(6) != null)
+				produto.setDataExclusao(LocalDateTime.parse(resultado.getString(6),DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+		}
+		catch(SQLException erro)
+		{
+			System.out.println("erro no metodo ConsultaUmProduto na classe ProdutoDAO");
+			System.out.println(erro.getMessage());
+			produto = null;
+		}
+		return produto;
 	}
 
 }

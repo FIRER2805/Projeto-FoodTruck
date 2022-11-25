@@ -17,4 +17,10 @@ public class ProdutoBO {
 		return produtoDAO.ConsultarTodosProdutosDAO();
 	}
 	
+	public ProdutoVO consultarUmProduto(int id)
+	{
+		ProdutoDAO produtoDAO = new ProdutoDAO();
+		return produtoDAO.consultaUmProduto(id);
+	}
+	
 }
