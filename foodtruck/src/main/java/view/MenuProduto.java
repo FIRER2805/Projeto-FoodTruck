@@ -53,7 +53,10 @@ public class MenuProduto {
 	}
 
 	private void AtualizarProduto() {
-		ProdutoController.atualizarProduto(this.produtoAtualizado());
+		if(ProdutoController.atualizarProduto(this.produtoAtualizado()) > 0)
+			System.out.println("Produto atualizado com sucesso!");
+		else
+			System.out.println("Não foi possivel cadastrar o produto");
 	}
 
 	// retorna as informações que devem ser atualizadas no produto

@@ -26,9 +26,9 @@ public class ProdutoController {
 		return produtoBO.consultarUmProduto(id);
 	}
 
-	public static void atualizarProduto(ProdutoVO produto) {
+	public static int atualizarProduto(ProdutoVO produto) {
 		ProdutoBO produtoBO = new ProdutoBO();
-		produtoBO.atualizarProduto(produto);
+		return produtoBO.atualizarProduto(produto);
 	}
 
 	public static void excluirProduto(int idProduto) {

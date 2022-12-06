@@ -104,7 +104,7 @@ public class ProdutoDAO {
 		return produto;
 	}
 
-	public void atualizarProduto(ProdutoVO produto) {
+	public int atualizarProduto(ProdutoVO produto) {
 		String query = "UPDATE produto SET idtipoproduto = ?, nome = ?, preco = ?, "
 				+ "datacadastro = ?, dataexclusao = ? WHERE idproduto = ? ;";
 		Connection conn = Banco.getConnection();
@@ -117,13 +117,13 @@ public class ProdutoDAO {
 			prstmt.setString(4, produto.getDataCadastro().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 			prstmt.setString(5, produto.getDataExclusao().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 			prstmt.setInt(6, produto.getIdProduto());
-			prstmt.executeUpdate();
-			System.out.println("O produto foi atualizado com sucesso!");
+			return prstmt.executeUpdate();
 		}
 		catch(SQLException erro)
 		{
 			System.out.println("Erro no metodo atualizarProduto da classe ProdutoDAO");
 			System.out.println(erro.getMessage());
+			return 0;
 		}
 	}
 

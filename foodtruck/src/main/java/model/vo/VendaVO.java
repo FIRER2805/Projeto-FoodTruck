@@ -4,17 +4,17 @@ import java.time.LocalDateTime;
 
 public class VendaVO {
 	private int idVenda;
-	private UsuarioVO usuarioVO;
+	private int idUsuarioVO;
 	private int numeroPedido;
 	private LocalDateTime dataVenda;
 	private LocalDateTime dataCancelamento;
 	private boolean flagEntrega;
 	private double taxaEntrega;
-	public VendaVO(int idVenda, UsuarioVO usuarioVO, int numeroPedido, LocalDateTime dataVenda,
+	public VendaVO(int idVenda, int usuarioVO, int numeroPedido, LocalDateTime dataVenda,
 			LocalDateTime dataCancelamento, boolean flagEntrega, double taxaEntrega) {
 		super();
 		this.idVenda = idVenda;
-		this.usuarioVO = usuarioVO;
+		this.idUsuarioVO = usuarioVO;
 		this.numeroPedido = numeroPedido;
 		this.dataVenda = dataVenda;
 		this.dataCancelamento = dataCancelamento;
@@ -31,11 +31,11 @@ public class VendaVO {
 	public void setIdVenda(int idVenda) {
 		this.idVenda = idVenda;
 	}
-	public UsuarioVO getUsuarioVO() {
-		return usuarioVO;
+	public int getIdUsuarioVO() {
+		return idUsuarioVO;
 	}
-	public void setUsuarioVO(UsuarioVO usuarioVO) {
-		this.usuarioVO = usuarioVO;
+	public void setIdUsuarioVO(int idUsuarioVO) {
+		this.idUsuarioVO = idUsuarioVO;
 	}
 	public int getNumeroPedido() {
 		return numeroPedido;
