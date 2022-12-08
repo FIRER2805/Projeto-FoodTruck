@@ -295,4 +295,50 @@ public class UsuarioDAO {
 		return usuario;
 	}
 
+	public ArrayList<UsuarioVO> consultarListaEntregadores() {
+		Connection conn = Banco.getConnection();
+		Statement stmt = Banco.getStatement(conn);
+		ResultSet resultado = null;
+		ArrayList<UsuarioVO> listaUsuariosVO = new ArrayList<UsuarioVO>();
+		String query = "SELECT u.idUsuario, tipo.descricao, u.nome, u.cpf, u.email, u.telefone, u.dataCadastro, "
+				+ "u.dataExpiracao, u.login, u.senha "
+				+ "FROM usuario u, tipoUsuario tipo "
+				+ "WHERE u.idTipoUsuario = tipo.idTipoUsuario "
+				+ "AND tipo.descricao like '" + TipoUsuarioVO.ENTREGADOR.toString() + "'";
+		try 
+		{
+			resultado = stmt.executeQuery(query);
+			while(resultado.next()) 
+			{
+				UsuarioVO usuarioVO = new UsuarioVO();
+				usuarioVO.setIdUsuario(Integer.parseInt(resultado.getString(1)));
+				usuarioVO.setTipoUsuario(TipoUsuarioVO.valueOf(resultado.getString(2)));
+				usuarioVO.setNome(resultado.getString(3));
+				usuarioVO.setCpf(resultado.getString(4));
+				usuarioVO.setEmail(resultado.getString(5));
+				usuarioVO.setTelefone(resultado.getString(6));
+				usuarioVO.setDataCadastro(LocalDateTime.parse(resultado.getString(7), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S")));
+				if(resultado.getString(8) != null)
+				{
+					usuarioVO.setDataExpiracao(LocalDateTime.parse(resultado.getString(8), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S")));
+				}
+				usuarioVO.setLogin(resultado.getString(9));
+				usuarioVO.setSenha(resultado.getString(10));
+				listaUsuariosVO.add(usuarioVO);
+			}
+		}
+		catch(SQLException erro)
+		{
+			System.out.println("Erro ao executar a query do método consultarListaEntregadores da classe UsuarioDAO");
+			System.out.println("Erro: " + erro.getMessage());
+		}
+		finally 
+		{
+			Banco.closeResultSet(resultado);
+			Banco.closeStatement(stmt);
+			Banco.closeConnection(conn);
+		}
+		return listaUsuariosVO;
+	}
+
 }

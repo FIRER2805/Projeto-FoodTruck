@@ -33,5 +33,13 @@ public class ProdutoBO {
 		produtoDAO.excluirProduto(idProduto);
 		
 	}
-	
+
+	public ArrayList<ProdutoVO> consultarTodosProdutosVigentesBO() {
+		ProdutoDAO produtoDAO = new ProdutoDAO();
+		ArrayList<ProdutoVO> listaProdutosVO = produtoDAO.consultarTodosProdutosVigentesDAO();
+		if(listaProdutosVO.isEmpty()) {
+		    System.out.println("\nlista de Produtos está vazia.");
+		}
+		return listaProdutosVO;
+	}
 }

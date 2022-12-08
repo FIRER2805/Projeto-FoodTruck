@@ -36,4 +36,9 @@ public class ProdutoController {
 		produtoBO.excluirProduto(idProduto);
 		
 	}
+
+	public ArrayList<ProdutoVO> consultarTodosProdutosVigentesController() {
+		ProdutoBO produtoBO = new ProdutoBO();
+		return produtoBO.consultarTodosProdutosVigentesBO();
+	}
 }

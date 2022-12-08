@@ -3,14 +3,14 @@ package model.vo;
 public class ItemVendaVO {
 	private int idItemVenda;
 	private VendaVO venda;
-	private ProdutoVO produto;
+	private int idProduto;
 	private int quantidade;
 
-	public ItemVendaVO(int idItemVenda, VendaVO venda, ProdutoVO produto, int quantidade) {
+	public ItemVendaVO(int idItemVenda, VendaVO venda, int idProduto, int quantidade) {
 		super();
 		this.idItemVenda = idItemVenda;
 		this.venda = venda;
-		this.produto = produto;
+		this.idProduto = idProduto;
 		this.quantidade = quantidade;
 	}
 
@@ -35,12 +35,12 @@ public class ItemVendaVO {
 		this.venda = venda;
 	}
 
-	public ProdutoVO getProduto() {
-		return produto;
+	public int getIdProduto() {
+		return idProduto;
 	}
 
-	public void setProduto(ProdutoVO produto) {
-		this.produto = produto;
+	public void setIdProduto(int idProduto) {
+		this.idProduto = idProduto;
 	}
 
 	public int getQuantidade() {

@@ -5,7 +5,7 @@ import model.vo.VendaVO;
 
 public class VendaController {
 
-	public static VendaVO cadastrarVenda(VendaVO venda) {
+	public VendaVO cadastrarVenda(VendaVO venda) {
 		VendaBO vendaBO = new VendaBO();
 		return vendaBO.cadastrarVenda(venda);
 	}
