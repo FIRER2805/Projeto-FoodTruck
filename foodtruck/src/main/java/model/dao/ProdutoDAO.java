@@ -100,7 +100,7 @@ public class ProdutoDAO {
 
 	public int atualizarProduto(ProdutoVO produto) {
 		String query = "UPDATE produto SET idtipoproduto = ?, nome = ?, preco = ?, "
-				+ "datacadastro = ?, dataexclusao = ? WHERE idproduto = ? ;";
+				+ "datacadastro = ? WHERE idproduto = ? ;";
 		Connection conn = Banco.getConnection();
 		PreparedStatement prstmt = Banco.getPreparedStatement(conn, query);
 		try {
@@ -108,8 +108,7 @@ public class ProdutoDAO {
 			prstmt.setString(2, produto.getNome());
 			prstmt.setDouble(3, produto.getPreco());
 			prstmt.setString(4, produto.getDataCadastro().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-			prstmt.setString(5, produto.getDataExclusao().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-			prstmt.setInt(6, produto.getIdProduto());
+			prstmt.setInt(5, produto.getIdProduto());
 			return prstmt.executeUpdate();
 		} catch (SQLException erro) {
 			System.out.println("Erro no metodo atualizarProduto da classe ProdutoDAO");
@@ -119,7 +118,7 @@ public class ProdutoDAO {
 	}
 
 	public void excluirProduto(int idProduto) {
-		String query = "delete from produto where idproduto = ?";
+		String query = "UPDATE produto set dataexclusao = now() where idproduto = ?";
 		Connection conn = Banco.getConnection();
 		PreparedStatement prstmt = Banco.getPreparedStatement(conn, query);
 		try {
@@ -130,7 +129,6 @@ public class ProdutoDAO {
 			System.out.println("Erro no metodo ExcluirProduto da classe ProdutoDAO");
 			System.out.println(erro.getMessage());
 		}
-
 	}
 
 	public ArrayList<ProdutoVO> consultarTodosProdutosVigentesDAO() {
@@ -139,7 +137,7 @@ public class ProdutoDAO {
 		ResultSet resultado = null;
 		ArrayList<ProdutoVO> listaProdutosVO = new ArrayList<ProdutoVO>();
 		String query = "SELECT p.idProduto, tipo.descricao, p.nome, p.preco, p.datacadastro "
-				+ "FROM produto p, tipoProduto tipo " + "WHERE p.idTipoProduto = tipo.idTipoProduto"
+				+ "FROM produto p, tipoProduto tipo " + "WHERE p.idTipoProduto = tipo.idTipoProduto "
 				+ "AND p.dataExclusao is NULL";
 		try {
 			resultado = stmt.executeQuery(query);
@@ -150,14 +148,12 @@ public class ProdutoDAO {
 				produtovo.setNome(resultado.getString(3));
 				produtovo.setPreco(Double.parseDouble(resultado.getString(4)));
 				produtovo.setDataCadastro(LocalDateTime.parse(resultado.getString(5),
-						DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S")));
+						DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 				listaProdutosVO.add(produtovo);
 			}
 		} catch (SQLException e) {
-			System.out.println("ferro ao executar a query do método consultarTodosProdutosVigentesDAO!");
+			System.out.println("Erro ao executar a query do método consultarTodosProdutosVigentesDAO!");
 			System.out.println("Erro: " + e.getMessage());
-
-			return null;
 		}
 		finally 
 		{

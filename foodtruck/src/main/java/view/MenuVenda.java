@@ -1,9 +1,11 @@
 package view;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import controller.EntregaController;
 import controller.ProdutoController;
 import controller.VendaController;
 import model.vo.ItemVendaVO;
@@ -50,6 +52,47 @@ public class MenuVenda {
 		}
 	}
 
+	private void atualizarSituacaoEntrega() {
+		VendaVO vendaVO = new VendaVO();
+		System.out.println("\nInforme o código da venda: ");
+		vendaVO.setIdVenda(Integer.parseInt(teclado.nextLine()));
+		
+		
+		EntregaController entregaController = new EntregaController();
+		boolean resultado = entregaController.atualizarSituacaoEntregaController(vendaVO);
+		if(resultado)
+		{
+			System.out.println("\nSituação da entrega da venda atualizada com sucesso.");
+		}
+		else 
+		{
+			System.out.println("Não foi possivel atualizar a situação da venda");
+		}
+	}
+
+	private void cancelarVenda() {
+		VendaVO vendaVO = new VendaVO();
+		do {
+			System.out.println("\nInforme o código da venda: ");
+			vendaVO.setIdVenda(Integer.parseInt(teclado.nextLine()));
+			System.out.println("Digite a data de cancelamento no formato dd/MM/yyyy HH:mm:ss: ");
+			vendaVO.setDataCancelamento(LocalDateTime.parse(teclado.nextLine(), DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
+			if(vendaVO.getIdVenda() == 0 || vendaVO.getDataCancelamento() == null)
+			{
+				System.out.println("Os campos código da venda e data de cancelamento são obrigatórios!");
+			}
+		} while(vendaVO.getIdVenda() == 0 || vendaVO.getDataCancelamento() == null);
+			boolean resultado = VendaController.cancelarVenda(vendaVO);
+			if(resultado)
+			{
+				System.out.println("\nVenda cancelada com Sucesso.");
+			}
+			else 
+			{
+				System.out.println("Não foi possivel cancelar a venda.");
+			}
+	}
+
 	private void cadastrarVenda(UsuarioVO usuarioVO) {
 		ArrayList<ProdutoVO> listaProdutosVO = this.listarProdutos();
 		VendaVO vendaVO = new VendaVO();
@@ -75,10 +118,10 @@ public class MenuVenda {
 
 		System.out.print("Pedido é para Entregar [S - N]: ");
 		String opcaoEntrega = teclado.nextLine();
-		if (opcaoEntrega.toUpperCase().equals("5") || opcaoEntrega.toUpperCase().equals("N")) {
+		if (opcaoEntrega.toUpperCase().equals("S") || opcaoEntrega.toUpperCase().equals("N")) {
 			double taxaEntrega = subTotal * PERCENTUAL;
 			double totalConta = subTotal;
-			if (opcaoEntrega.toUpperCase().equals("s")) {
+			if (opcaoEntrega.toUpperCase().equals("S")) {
 				vendaVO.setFlagEntrega(true);
 				vendaVO.setTaxaEntrega(taxaEntrega);
 				totalConta += taxaEntrega;
@@ -136,6 +179,7 @@ public class MenuVenda {
 
 	private double cadastrarItemVendaVO(ItemVendaVO itemVendaVO, ArrayList<ProdutoVO> listaProdutosVO) {
 		System.out.print("Informe o código do produto: ");
+		itemVendaVO.setIdProduto(Integer.parseInt(teclado.nextLine()));
 		System.out.print("Informe a quantidade do produto: ");
 		itemVendaVO.setQuantidade(Integer.parseInt(teclado.nextLine()));
 		double valor = 0;

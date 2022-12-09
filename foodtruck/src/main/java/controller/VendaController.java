@@ -10,9 +10,9 @@ public class VendaController {
 		return vendaBO.cadastrarVenda(venda);
 	}
 
-	public static int cancelarVenda(int idVenda) {
+	public static boolean cancelarVenda(VendaVO vendaVO) {
 		VendaBO vendaBO = new VendaBO();
-		return vendaBO.cancelarVenda(idVenda);
+		return vendaBO.cancelarVenda(vendaVO);
 	}
 	
 }

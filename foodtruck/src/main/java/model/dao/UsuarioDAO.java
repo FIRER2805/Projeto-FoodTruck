@@ -317,10 +317,10 @@ public class UsuarioDAO {
 				usuarioVO.setCpf(resultado.getString(4));
 				usuarioVO.setEmail(resultado.getString(5));
 				usuarioVO.setTelefone(resultado.getString(6));
-				usuarioVO.setDataCadastro(LocalDateTime.parse(resultado.getString(7), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S")));
+				usuarioVO.setDataCadastro(LocalDateTime.parse(resultado.getString(7), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 				if(resultado.getString(8) != null)
 				{
-					usuarioVO.setDataExpiracao(LocalDateTime.parse(resultado.getString(8), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S")));
+					usuarioVO.setDataExpiracao(LocalDateTime.parse(resultado.getString(8), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 				}
 				usuarioVO.setLogin(resultado.getString(9));
 				usuarioVO.setSenha(resultado.getString(10));

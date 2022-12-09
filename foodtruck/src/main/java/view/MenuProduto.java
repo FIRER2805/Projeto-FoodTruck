@@ -72,8 +72,6 @@ public class MenuProduto {
 		produtoVO.setPreco(Double.parseDouble(scan.nextLine()));
 		System.out.println("Informe a data de cadastro no formato 'yyyy-MM-dd HH:mm:ss':");
 		produtoVO.setDataCadastro(LocalDateTime.parse(scan.nextLine(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-		System.out.println("Informe a data de exclusão no formato 'yyyy-MM-dd HH:mm:ss':");
-		produtoVO.setDataExclusao(LocalDateTime.parse(scan.nextLine(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 		return produtoVO;
 	}
 

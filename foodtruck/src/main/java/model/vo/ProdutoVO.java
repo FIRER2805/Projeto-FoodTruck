@@ -74,6 +74,23 @@ public class ProdutoVO {
 		this.dataExclusao = dataExclusao;
 	}
 	
+	public void imprimir() {
+		System.out.printf("\n %3d  %-13s  %-20s  %-11s  %-25s  %-13s",
+				this.getIdProduto(),
+				this.getTipoProduto(),
+				this.getNome(),
+				this.getPreco(),
+				this.getDataCadastro(),
+				this.getDataExclusao());
+	}
+	/*
+	this.idProduto = idProduto;
+	this.tipoProduto = tipoProduto;
+	this.nome = nome;
+	this.preco = preco;
+	this.dataCadastro = dataCadastro;
+	this.dataExclusao = dataExclusao;
+	*/
 	@Override
 	public String toString()
 	{

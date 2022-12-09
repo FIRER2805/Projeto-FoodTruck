@@ -3,10 +3,12 @@ package model.bo;
 import java.util.ArrayList;
 import java.util.Random;
 
+import model.dao.EntregaDAO;
 import model.dao.UsuarioDAO;
 import model.vo.EntregaVO;
 import model.vo.SituacaoEntregaVO;
 import model.vo.UsuarioVO;
+import model.vo.VendaVO;
 
 public class EntregaBO {
 
@@ -31,6 +33,18 @@ public class EntregaBO {
 				System.out.println("Houve um problema ao tentar cadastrar a entrega!");
 				retorno = false;
 			}
+		}
+		return retorno;
+	}
+
+	public boolean atualizarSituacaoEntregaBO(VendaVO vendaVO) {
+		boolean retorno = false;
+		EntregaDAO entregaDAO = new EntregaDAO();
+		VendaBO vendaBO = new VendaBO();
+		boolean resultado = vendaBO.verificarVendaParaAtualizarSituacaoEntrega(vendaVO);
+		if(resultado)
+		{
+			retorno = entregaDAO.atualizarSituacaoEntregaDAO(vendaVO);
 		}
 		return retorno;
 	}

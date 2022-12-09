@@ -4,12 +4,18 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
+import model.vo.EntregaVO;
 import model.vo.ItemVendaVO;
 import model.vo.VendaVO;
 
 public class VendaDAO {
 
+	private static final int ENTREGA_CANCELADA = 6;
+	
 	public VendaVO cadastrarVenda(VendaVO venda) {
 		String query = "INSERT INTO venda (idUsuario, numeroPedido, dataVenda, flagEntrega";
 		if(venda.isFlagEntrega())
@@ -56,10 +62,35 @@ public class VendaDAO {
 		return venda;
 	}
 
-	public int cancelarVenda(int idVenda) {
-		String update = "update venda set datacancelamento = ? where idvenda = ?";
-		
-		return 0;
+	public boolean cancelarVenda(VendaVO venda) {
+		String update = "UPDATE venda set datacancelamento = ? WHERE idvenda = ?";
+		String update2 = "UPDATE entrega set idsituacaoentrega = ? WHERE idvenda = ?";
+		boolean retorno = false;
+		Connection conn = Banco.getConnection();
+		PreparedStatement pstmt = Banco.getPreparedStatement(conn, update);
+		PreparedStatement pstmt2 = Banco.getPreparedStatement(conn, update2);
+		try 
+		{
+			pstmt.setString(1, venda.getDataCancelamento().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+			pstmt.setInt(2, venda.getIdVenda());
+			pstmt2.setInt(1, ENTREGA_CANCELADA);
+			pstmt2.setInt(2, venda.getIdVenda());
+			if(pstmt.executeUpdate() != 0 && pstmt2.executeUpdate() != 0)
+			{
+				retorno = true;
+			}
+		}
+		catch(SQLException erro)
+		{
+			System.out.println("Erro no método cancelarVenda da classe VendaDAO");
+			System.out.println("Erro: " + erro.getMessage());
+		}
+		finally 
+		{
+			Banco.closePreparedStatement(pstmt);
+			Banco.closeConnection(conn);
+		}
+		return retorno;
 	}
 
 	public boolean cadastrarItemVenda(VendaVO venda) {
@@ -101,6 +132,129 @@ public class VendaDAO {
 		finally 
 		{
 			Banco.closeStatement(pstmt);
+			Banco.closeConnection(conn);
+		}
+		return retorno;
+	}
+
+	public boolean verificarExistenciaRegistroPorIdVendaDAO(int idVenda) {
+		Connection conn = Banco.getConnection();
+		Statement stmt = Banco.getStatement(conn);
+		ResultSet resultado = null;
+		boolean retorno = false;
+		String query = "SELECT idVenda FROM venda WHERE idvenda = " + idVenda;
+		try 
+		{
+			resultado = stmt.executeQuery(query);
+			if(resultado.next())
+			{
+				retorno = true;
+			}
+		}
+		catch (SQLException erro)
+		{
+			System.out.println("ERRO ao executar a query do método verificarExistenciaRegistroPorIdVendaDAO da classe VendaDAO!");
+			System.out.println("Erro: " + erro.getMessage());
+		}
+		finally 
+		{
+			Banco.closeResultSet(resultado);
+			Banco.closeStatement(stmt);
+			Banco.closeConnection(conn);
+		}
+		return retorno;
+	}
+
+	public boolean verificarVendaPossuiEntrega(int idVenda) {
+		Connection conn = Banco.getConnection();
+		Statement stmt = Banco.getStatement(conn);
+		ResultSet resultado = null;
+		boolean retorno = false;
+		String query = "SELECT flagEntrega from venda WHERE idvenda = " + idVenda;
+		try 
+		{
+			resultado = stmt.executeQuery(query);
+			if(resultado.next())
+			{
+				if(resultado.getString(1).equals("1"))
+				{
+					retorno = true;
+				}
+			}
+		}
+		catch(SQLException erro)
+		{
+			System.out.println("Erro ao executar a query do método verificarVendaPossuiEntrega!");
+			System.out.println("Erro: " + erro.getMessage());
+		}
+		finally 
+		{
+			Banco.closeResultSet(resultado);
+			Banco.closeStatement(stmt);
+			Banco.closeConnection(conn);
+		}
+		return retorno;
+	}
+
+	public boolean verificaCancelamentoPorIdVendaDAO(int idVenda) {
+		Connection conn = Banco.getConnection();
+		Statement stmt = Banco.getStatement(conn);
+		ResultSet resultado = null;
+		boolean retorno = false;
+		String query = "SELECT datacancelamento from venda WHERE idvenda = " + idVenda;
+		try 
+		{
+			resultado = stmt.executeQuery(query);
+			if(resultado.next())
+			{
+				if(resultado.getString(1) != null)
+				{
+					retorno = true;
+				}
+			}
+		}
+		catch(SQLException erro)
+		{
+			System.out.println("Erro ao executar a query do método verificaCancelamentoPorIdVendaDAO!");
+			System.out.println("Erro: " + erro.getMessage());
+		}
+		finally 
+		{
+			Banco.closeResultSet(resultado);
+			Banco.closeStatement(stmt);
+			Banco.closeConnection(conn);
+		}
+		return retorno;
+	}
+
+	public boolean dataExclusaoValida(VendaVO venda) {
+		String query = "SELECT datavenda FROM venda WHERE idvenda = ? ";
+		boolean retorno = false;
+		Connection conn = Banco.getConnection();
+		PreparedStatement pstmt = Banco.getPreparedStatement(conn, query);
+		ResultSet resultado = null;
+		try 
+		{
+			pstmt.setInt(1, venda.getIdVenda());
+			resultado = pstmt.executeQuery(query);
+			if(resultado != null && resultado.next())
+			{
+				// verifica se a data de venda é antes da data de exclusão
+				if(LocalDateTime.parse(resultado.getString(1),DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).isBefore(venda.getDataCancelamento()))
+				{
+					retorno = true;
+				}
+			}
+		}
+		catch(SQLException erro)
+		{
+			System.out.println("Erro no método dataExclusaoValida da classe VendaDAO");
+			System.out.println("Erro: " + erro.getMessage());
+		}
+		finally 
+		{
+			Banco.closeResultSet(resultado);
+			Banco.closePreparedStatement(pstmt);
 			Banco.closeConnection(conn);
 		}
 		return retorno;
