@@ -9,5 +9,10 @@ public class EntregaController {
 		EntregaBO entregaBO = new EntregaBO();
 		return entregaBO.atualizarSituacaoEntregaBO(vendaVO);
 	}
+
+	public static void cancelaEntrega(int id) {
+		EntregaBO entregaBO = new EntregaBO();
+		entregaBO.cancelaEntrega(id);
+	}
 	
 }

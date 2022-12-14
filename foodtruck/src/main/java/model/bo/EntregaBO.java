@@ -5,6 +5,7 @@ import java.util.Random;
 
 import model.dao.EntregaDAO;
 import model.dao.UsuarioDAO;
+import model.dao.VendaDAO;
 import model.vo.EntregaVO;
 import model.vo.SituacaoEntregaVO;
 import model.vo.UsuarioVO;
@@ -47,6 +48,34 @@ public class EntregaBO {
 			retorno = entregaDAO.atualizarSituacaoEntregaDAO(vendaVO);
 		}
 		return retorno;
+	}
+
+	public void cancelaEntrega(int id) {
+		VendaDAO vendaDAO = new VendaDAO();
+		EntregaDAO entregaDAO = new EntregaDAO();
+		if(vendaDAO.verificarExistenciaRegistroPorIdVendaDAO(id))
+		{
+			if(!vendaDAO.verificaCancelamentoPorIdVendaDAO(id))
+			{
+				if(!entregaDAO.entregaCancelada(id))
+				{
+					entregaDAO.cancelarEntrega(id);
+				}
+				else 
+				{
+					System.out.println("Entrega já cancelada");
+				}
+			}
+			else 
+			{
+				System.out.println("Venda já cancelada");
+			}
+		}
+		else 
+		{
+			System.out.println("Venda não encontrada");
+		}
+		
 	}
 
 }

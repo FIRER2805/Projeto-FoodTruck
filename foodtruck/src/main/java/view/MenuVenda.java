@@ -17,7 +17,8 @@ import model.vo.VendaVO;
 public class MenuVenda {
 	private static final int OPCAO_MENU_CADASTRAR_VENDA = 1;
 	private static final int OPCAO_MENU_CANCELAR_VENDA = 2;
-	private static final int OPCAO_MENU_SITUACAO_ENTREGA = 3;
+	private static final int OPCAO_MENU_SITUACAO_ENTREGA = 4;
+	private static final int OPCAO_MENU_CANCELAR_ENTREGA = 3;
 	private static final int OPCAO_MENU_VENDA_VOLTAR = 9;
 
 	private static int NUMERO_PEDIDO = 0;
@@ -44,6 +45,12 @@ public class MenuVenda {
 					this.atualizarSituacaoEntrega();
 				}
 				break;
+			case OPCAO_MENU_CANCELAR_ENTREGA:
+				if(!usuarioVO.getTipoUsuario().equals(TipoUsuarioVO.ENTREGADOR))
+				{
+					this.cancelarEntrega();
+				}
+				break;
 			default:
 				System.out.println("\nOpção Inválida!!!");
 				break;
@@ -52,20 +59,21 @@ public class MenuVenda {
 		}
 	}
 
+	private void cancelarEntrega() {
+		System.out.println("informe o id da venda que você deseja cancelar a entrega");
+		EntregaController.cancelaEntrega(Integer.parseInt(teclado.nextLine()));
+	}
+
 	private void atualizarSituacaoEntrega() {
 		VendaVO vendaVO = new VendaVO();
 		System.out.println("\nInforme o código da venda: ");
 		vendaVO.setIdVenda(Integer.parseInt(teclado.nextLine()));
-		
-		
+
 		EntregaController entregaController = new EntregaController();
 		boolean resultado = entregaController.atualizarSituacaoEntregaController(vendaVO);
-		if(resultado)
-		{
+		if (resultado) {
 			System.out.println("\nSituação da entrega da venda atualizada com sucesso.");
-		}
-		else 
-		{
+		} else {
 			System.out.println("Não foi possivel atualizar a situação da venda");
 		}
 	}
@@ -76,21 +84,18 @@ public class MenuVenda {
 			System.out.println("\nInforme o código da venda: ");
 			vendaVO.setIdVenda(Integer.parseInt(teclado.nextLine()));
 			System.out.println("Digite a data de cancelamento no formato dd/MM/yyyy HH:mm:ss: ");
-			vendaVO.setDataCancelamento(LocalDateTime.parse(teclado.nextLine(), DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
-			if(vendaVO.getIdVenda() == 0 || vendaVO.getDataCancelamento() == null)
-			{
+			vendaVO.setDataCancelamento(
+					LocalDateTime.parse(teclado.nextLine(), DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
+			if (vendaVO.getIdVenda() == 0 || vendaVO.getDataCancelamento() == null) {
 				System.out.println("Os campos código da venda e data de cancelamento são obrigatórios!");
 			}
-		} while(vendaVO.getIdVenda() == 0 || vendaVO.getDataCancelamento() == null);
-			boolean resultado = VendaController.cancelarVenda(vendaVO);
-			if(resultado)
-			{
-				System.out.println("\nVenda cancelada com Sucesso.");
-			}
-			else 
-			{
-				System.out.println("Não foi possivel cancelar a venda.");
-			}
+		} while (vendaVO.getIdVenda() == 0 || vendaVO.getDataCancelamento() == null);
+		boolean resultado = VendaController.cancelarVenda(vendaVO);
+		if (resultado) {
+			System.out.println("\nVenda cancelada com Sucesso.");
+		} else {
+			System.out.println("Não foi possivel cancelar a venda.");
+		}
 	}
 
 	private void cadastrarVenda(UsuarioVO usuarioVO) {
@@ -138,22 +143,21 @@ public class MenuVenda {
 			} else {
 				System.out.println("voce digitou uma opção inválida. ");
 			}
-
 		}
 	}
 
 	private boolean validarCamposCadastro(VendaVO vendaVO) {
 		boolean resultado = true;
 		System.out.println();
-		if(vendaVO.getIdUsuarioVO() == 0) {
-		     System.out.println("O campo código do usuário é obrigatorio.");
-		     resultado = false;
+		if (vendaVO.getIdUsuarioVO() == 0) {
+			System.out.println("O campo código do usuário é obrigatorio.");
+			resultado = false;
 		}
-		if(vendaVO.getListaItemVendaVO() == null || vendaVO.getListaItemVendaVO().isEmpty()) {
-		     System.out.println("O campo dos produtos vendidos é obrigatório.");
-		     resultado = false;
+		if (vendaVO.getListaItemVendaVO() == null || vendaVO.getListaItemVendaVO().isEmpty()) {
+			System.out.println("O campo dos produtos vendidos é obrigatório.");
+			resultado = false;
 		}
-		 return resultado;
+		return resultado;
 	}
 
 	private int gerarNumeroPedido() {
@@ -198,6 +202,7 @@ public class MenuVenda {
 		if (!usuarioVO.getTipoUsuario().equals(TipoUsuarioVO.ENTREGADOR)) {
 			System.out.println(OPCAO_MENU_CADASTRAR_VENDA + " - Cadastrar Venda");
 			System.out.println(OPCAO_MENU_CANCELAR_VENDA + " - Cancelar Venda");
+			System.out.println(OPCAO_MENU_CANCELAR_ENTREGA + " - Cancelar Entrega");
 		}
 		if (!usuarioVO.getTipoUsuario().equals(TipoUsuarioVO.CLIENTE)) {
 			System.out.println(OPCAO_MENU_SITUACAO_ENTREGA + " - Situação da Entrega");

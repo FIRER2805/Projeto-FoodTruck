@@ -102,5 +102,64 @@ public class EntregaDAO {
 		}
 		return retorno;
 	}
+	
+	public boolean entregaCancelada(int id) {
+		Connection conn = Banco.getConnection();
+		Statement stmt = Banco.getStatement(conn);
+		String query = "select idsituacaoentrega from entrega where idvenda = " + id;
+		boolean retorno = false;
+		ResultSet resultado = null;
+		try 
+		{
+			resultado = stmt.executeQuery(query);
+			if(resultado != null && resultado.next())
+			{
+				if(resultado.getInt(1) == 6)
+				{
+					retorno = true;
+				}
+			}
+		}
+		catch(SQLException erro)
+		{
+			System.out.println("Erro no método vendaCancelada() da classe VendaDAO");
+			System.out.println(erro.getMessage());
+		}
+		finally 
+		{
+			Banco.closeConnection(conn);
+			Banco.closeStatement(stmt);
+			Banco.closeResultSet(resultado);
+		}
+		return retorno;
+	}
+
+	public void cancelarEntrega(int id) {
+		Connection conn = Banco.getConnection();
+		Statement stmt = Banco.getStatement(conn);
+		String update = "Update entrega set idsituacaoentrega = 6 where idvenda = " + id;
+		try 
+		{
+			int colunasAfetadas = stmt.executeUpdate(update);
+			if(colunasAfetadas > 0)
+			{
+				System.out.println("Entrega cancelada com sucesso!");
+			}
+			else 
+			{
+				System.out.println("Não foi possivel cancelar a entrega!");
+			}
+		}
+		catch(SQLException erro)
+		{
+			System.out.println("Erro no método cancelarEntrega da classe entregaDAO");
+			System.out.println(erro.getMessage());
+		}
+		finally 
+		{
+			Banco.closeConnection(conn);
+			Banco.closeStatement(stmt);
+		}
+	}
 
 }
