@@ -6,8 +6,15 @@ import model.bo.RelatorioBO;
 import model.dto.VendasCanceladasDTO;
 
 public class RelatorioController {
-	public ArrayList<VendasCanceladasDTO> gerarRelatorioVendasCanceladasController() {
+	public static void relatorioPedidos() 
+	{
 		RelatorioBO relatorioBO = new RelatorioBO();
-		return relatorioBO.gerarRelatorioVendasCanceladasBO();
+		relatorioBO.relatorioPedidos();
+	}
+	
+	public static void acompanhamentoPedido(int id)
+	{
+		RelatorioBO relatorioBO = new RelatorioBO();
+		relatorioBO.acompanhamentoPedido(id);
 	}
 }

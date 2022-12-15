@@ -4,11 +4,15 @@ import java.util.ArrayList;
 
 import model.dao.RelatorioDAO;
 import model.dto.VendasCanceladasDTO;
+import relatorio.Relatorio;
 
 public class RelatorioBO {
-	public ArrayList<VendasCanceladasDTO> gerarRelatorioVendasCanceladasBO() {
-		RelatorioDAO relatorioDAO = new RelatorioDAO();
-	
-		return relatorioDAO.gerarRelatorioVendasCanceladasDAO();
+	public void relatorioPedidos()
+	{
+		Relatorio.listaPedidos();
+	}
+	public void acompanhamentoPedido(int id)
+	{
+		Relatorio.acompanhamentoPedido(id);
 	}
 }

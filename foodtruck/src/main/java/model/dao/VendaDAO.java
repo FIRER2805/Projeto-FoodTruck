@@ -228,15 +228,14 @@ public class VendaDAO {
 	}
 
 	public boolean dataExclusaoValida(VendaVO venda) {
-		String query = "SELECT datavenda FROM venda WHERE idvenda = ? ";
+		String query = "SELECT datavenda FROM venda WHERE idvenda = " + venda.getIdVenda();
 		boolean retorno = false;
 		Connection conn = Banco.getConnection();
-		PreparedStatement pstmt = Banco.getPreparedStatement(conn, query);
+		Statement stmt = Banco.getStatement(conn);
 		ResultSet resultado = null;
 		try 
 		{
-			pstmt.setInt(1, venda.getIdVenda());
-			resultado = pstmt.executeQuery(query);
+			resultado = stmt.executeQuery(query);
 			if(resultado != null && resultado.next())
 			{
 				// verifica se a data de venda é antes da data de exclusão
@@ -254,7 +253,7 @@ public class VendaDAO {
 		finally 
 		{
 			Banco.closeResultSet(resultado);
-			Banco.closePreparedStatement(pstmt);
+			Banco.closePreparedStatement(stmt);
 			Banco.closeConnection(conn);
 		}
 		return retorno;
